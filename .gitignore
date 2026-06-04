@@ -1,0 +1,54 @@
+# Dependencias
+node_modules/
+.pnp
+.pnp.js
+
+# Variables de entorno
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build / dist
+dist/
+build/
+
+# Coverage de tests
+coverage/
+.nyc_output/
+
+# Sistema operativo
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Docker
+.dockerenv
+
+# Uploads locales (si guardas archivos subidos en disco)
+uploads/
+
+# Temporales
+tmp/
+temp/
