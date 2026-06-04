@@ -19,7 +19,7 @@ const listarMascotas = async (req, res, next) => {
     } catch (err) {
         next(err);
     }
-    };
+};
 
 const obtenerMascota = async (req, res, next) => {
     try {
