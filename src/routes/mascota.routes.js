@@ -10,22 +10,22 @@ const upload = multer({ storage: multer.memoryStorage() });
 const validacionesMascota = [
     body('nombre')
         .notEmpty().withMessage('El nombre de la mascota no puede estar vacío')
-        .isLength({ min: 5, max: 12 }).withMessage('El nombre debe tener entre 5 y 12 caracteres')
+        .isLength({ min: 3 }).withMessage('El nombre debe tener mas de 3 caracteres')
         .matches(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/).withMessage('El nombre solo puede contener letras y espacios'),
 
     body('raza')
         .notEmpty().withMessage('La raza es obligatoria')
-        .isLength({ min: 10, max: 15 }).withMessage('La raza debe tener entre 10 y 15 caracteres')
+        .isLength({ min: 3}).withMessage('La raza debe tener mas de 3 caracteres')
         .matches(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\-]+$/).withMessage('La raza solo puede contener letras'),
 
     body('color')
         .notEmpty().withMessage('El color es obligatorio')
-        .isLength({ min: 10, max: 15 }).withMessage('El color debe tener entre 10 y 15 caracteres')
+        .isLength({ min: 4}).withMessage('El color debe tener ams de 4 caracteres')
         .matches(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s,]+$/).withMessage('El color solo debe contener letras'),
 
     body('tamano')
         .notEmpty().withMessage('El tamaño es obligatorio')
-        .matches(/^(?i)(pequeño|mediano|grande)$/i).withMessage('El tamaño debe ser PEQUEÑO, MEDIANO o GRANDE'),
+        .matches(/^(pequeño|mediano|grande)$/i).withMessage('El tamaño debe ser PEQUEÑO, MEDIANO o GRANDE'),
 
     body('estado')
         .notEmpty().withMessage('El estado (PERDIDA/ENCONTRADA) es obligatorio')
