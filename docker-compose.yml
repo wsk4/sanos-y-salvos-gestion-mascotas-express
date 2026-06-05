@@ -1,33 +1,43 @@
-# docker-compose.yml
 version: '3.8'
 
 services:
-  db:
-    image: postgres:15-alpine
-    container_name: mascotas_db
+  postgres-gestion:
+    image: postgis/postgis:15-3.3
+    container_name: postgres-gestion
     environment:
-      POSTGRES_DB: mascotas_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: secret
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     ports:
       - "5432:5432"
+    networks:
+      - sanos-network
     volumes:
-      - mascotas_data:/var/lib/postgresql/data
+      - pg_data_gestion:/var/lib/postgresql/data
 
-  app:
-    build: .
-    container_name: mascotas_app
-    depends_on:
-      - db
-    environment:
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_NAME: mascotas_db
-      DB_USER: postgres
-      DB_PASSWORD: secret
-      PORT: 8080
+  ms-mascotas:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sanos-ms-mascotas
+    restart: always  
     ports:
-      - "8080:8080"
+      - "${PORT}:${PORT}"
+    environment:
+      DB_HOST: postgres-gestion
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      PORT: ${PORT}
+    depends_on:
+      - postgres-gestion
+    networks:
+      - sanos-network
+
+networks:
+  sanos-network:
+    external: true
 
 volumes:
-  mascotas_data:
+  pg_data_gestion:

@@ -1,5 +1,19 @@
 const mascotaService = require('../services/mascota.service');
 
+
+
+const formatearMascota = (mascota) => {
+    const mascotaJSON = mascota.toJSON ? mascota.toJSON() : { ...mascota };
+    
+    if (mascotaJSON.fotoBytes) {
+        delete mascotaJSON.fotoBytes;
+        mascotaJSON.tieneFoto = true; 
+    } else {
+        mascotaJSON.tieneFoto = false;
+    }
+    
+    return mascotaJSON;
+};
 const crearMascota = async (req, res, next) => {
     try {
         const nuevaMascota = await mascotaService.registrarMascota(req.body, req.file);
