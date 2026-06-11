@@ -1,16 +1,5 @@
-const { Sequelize, DataTypes } = require('sequelize');
-
-const sequelize = new Sequelize(
-    process.env.DB_NAME,
-    process.env.DB_USER,
-    process.env.DB_PASSWORD,
-    {
-        host: process.env.DB_HOST,
-        port: process.env.DB_PORT,
-        dialect: 'postgres',
-        logging: false,
-    }
-);
+import { DataTypes } from 'sequelize';
+import sequelize from '../config/database.js';
 
 const Mascota = sequelize.define('Mascota', {
     id: {
@@ -52,7 +41,7 @@ const Mascota = sequelize.define('Mascota', {
         type: DataTypes.DATE,
         field: 'fecha_reporte',
         allowNull: false,
-        defaultValue: Sequelize.NOW,
+        defaultValue: DataTypes.NOW,
     },
     contactoInfo: {
         type: DataTypes.STRING(50),
@@ -65,8 +54,8 @@ const Mascota = sequelize.define('Mascota', {
     hooks: {
         beforeCreate: (mascota) => {
         mascota.fechaReporte = new Date();
-        }
-    }
+        },
+    },
 });
 
-module.exports = { sequelize, Mascota };
+export default Mascota;

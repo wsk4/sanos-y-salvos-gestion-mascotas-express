@@ -1,20 +1,22 @@
-const { Mascota } = require('../models/mascota.model');
+import { MascotaRepository } from '../repositories/mascota.repository.js';
+
+const mascotaRepository = new MascotaRepository();
 
 const registrarMascota = async (data, file) => {
     if (file) {
         data.fotoBytes = file.buffer;
         data.fotoUrl = null;
     }
-    return await Mascota.create(data);
+    return mascotaRepository.create(data);
 };
 
-const obtenerTodas = async () => Mascota.findAll();
+const obtenerTodas = async () => mascotaRepository.findAll();
 
 const obtenerPorEstado = async (estado) =>
-    Mascota.findAll({ where: { estado: estado.toUpperCase() } });
+    mascotaRepository.findByEstado(estado);
 
 const obtenerPorId = async (id) => {
-    const mascota = await Mascota.findByPk(id);
+    const mascota = await mascotaRepository.findById(id);
     if (!mascota) {
         const err = new Error(`Mascota con id ${id} no encontrada`);
         err.status = 404;
@@ -25,20 +27,15 @@ const obtenerPorId = async (id) => {
 
 const actualizarMascotaParcial = async (id, data, file) => {
     const mascota = await obtenerPorId(id);
-    if (data) Object.assign(mascota, data);
-    if (file) {
-        mascota.fotoBytes = file.buffer;
-        mascota.fotoUrl = null;
-    }
-    return await mascota.save();
+    return mascotaRepository.update(mascota, data, file);
 };
 
 const eliminarMascota = async (id) => {
     const mascota = await obtenerPorId(id);
-    await mascota.destroy();
+    return mascotaRepository.delete(mascota);
 };
 
-module.exports = {
+export default {
     registrarMascota,
     obtenerTodas,
     obtenerPorEstado,

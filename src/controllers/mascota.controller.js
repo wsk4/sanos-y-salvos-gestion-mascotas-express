@@ -1,19 +1,16 @@
-const mascotaService = require('../services/mascota.service');
-
-
+import mascotaService from '../services/mascota.service.js';
 
 const formatearMascota = (mascota) => {
     const mascotaJSON = mascota.toJSON ? mascota.toJSON() : { ...mascota };
-    
     if (mascotaJSON.fotoBytes) {
         delete mascotaJSON.fotoBytes;
-        mascotaJSON.tieneFoto = true; 
+        mascotaJSON.tieneFoto = true;
     } else {
         mascotaJSON.tieneFoto = false;
     }
-    
     return mascotaJSON;
 };
+
 const crearMascota = async (req, res, next) => {
     try {
         const nuevaMascota = await mascotaService.registrarMascota(req.body, req.file);
@@ -66,7 +63,7 @@ const eliminarMascota = async (req, res, next) => {
     }
 };
 
-module.exports = {
+export default {
     crearMascota,
     listarMascotas,
     obtenerMascota,
