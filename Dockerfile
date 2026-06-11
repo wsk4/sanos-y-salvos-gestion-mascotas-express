@@ -9,6 +9,7 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile --prod
 
 COPY src/ ./src/
+COPY index.js .
 
 EXPOSE 8080
-CMD ["node", "src/index.js"]
+CMD ["node", "index.js"]
