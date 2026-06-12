@@ -19,7 +19,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: sanos-ms-mascotas
+    container_name: sanos_ms_mascotas
     restart: always  
     ports:
       - "${PORT}:${PORT}"
