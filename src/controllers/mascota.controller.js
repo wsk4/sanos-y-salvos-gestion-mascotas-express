@@ -11,6 +11,7 @@ const formatearMascota = (mascota) => {
     return mascotaJSON;
 };
 
+// endpoint para crear una mascota
 const crearMascota = async (req, res, next) => {
     try {
         const nuevaMascota = await mascotaService.registrarMascota(req.body, req.file);
@@ -20,6 +21,17 @@ const crearMascota = async (req, res, next) => {
     }
 };
 
+// endpoint combinado con datos de geolocalizacion
+const getDashboard = async (req, res, next) => {
+    try {
+        const data = await mascotaService.obtenerDashboard();
+        res.status(200).json(data);
+    } catch (err) {
+        next(err);
+    }
+};
+
+//endpoint apra listar mascotas
 const listarMascotas = async (req, res, next) => {
     try {
         const { estado } = req.query;
@@ -32,6 +44,7 @@ const listarMascotas = async (req, res, next) => {
     }
 };
 
+//endpoint para obtener una mascota
 const obtenerMascota = async (req, res, next) => {
     try {
         const mascota = await mascotaService.obtenerPorId(req.params.id);
@@ -41,6 +54,7 @@ const obtenerMascota = async (req, res, next) => {
     }
 };
 
+//endpoint para actualizar alguan caracteristica de una mascota
 const actualizarMascotaParcial = async (req, res, next) => {
     try {
         const mascotaActualizada = await mascotaService.actualizarMascotaParcial(
@@ -54,6 +68,7 @@ const actualizarMascotaParcial = async (req, res, next) => {
     }
 };
 
+//endpoint para eliminar una mascota
 const eliminarMascota = async (req, res, next) => {
     try {
         await mascotaService.eliminarMascota(req.params.id);

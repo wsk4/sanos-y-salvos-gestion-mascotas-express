@@ -6,6 +6,18 @@ import errorHandler from './middlewares/errorHandler.js';
 
 const app = express();
 
+app.use(cors({
+    origin: [
+        'http://localhost:5173',
+        'http://localhost:3000',
+        process.env.BFF_URL,
+        process.env.FRONTEND_URL,
+    ].filter(Boolean),
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Authorization', 'Content-Type', 'Cache-Control'],
+    credentials: true,
+}));
+
 app.use(express.json());
 
 app.use('/api/v1/mascotas', mascotaRoutes);
