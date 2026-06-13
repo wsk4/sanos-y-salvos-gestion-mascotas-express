@@ -1,32 +1,31 @@
-# =========================================================
-# Fase única de producción (Ligera y segura)
-# =========================================================
+# ==========================================
+# Runtime e Instalación Limpia de Node
+# ==========================================
 FROM node:22-alpine
 
-# Instalamos 'tini' para manejar correctamente el ciclo de vida del proceso (PID 1)
+# Instalar 'tini' para gestionar correctamente las señales del sistema (SIGTERM, SIGINT)
 RUN apk add --no-cache tini
 
+# Configuración del entorno global para pnpm
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable && corepack prepare pnpm@11.3.0 --activate
 
 WORKDIR /app
 
-# Copiamos archivos de configuración con el dueño correcto
-COPY --chown=node:node package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+# Copiar manifiestos asegurando que pertenezcan al usuario del sistema 'node'
+COPY --chown=node:node package.json pnpm-lock.yaml pnpm-workspace.yaml* ./
 
-# Instalación limpia de producción
+# Instalación estricta de dependencias omitiendo las de desarrollo (DevDependencies)
 RUN pnpm install --frozen-lockfile --prod
 
-# Copiamos el código fuente garantizando que pertenezca al usuario 'node'
+# Copiar el código fuente garantizando permisos restrictivos seguros
 COPY --chown=node:node src/ ./src/
 COPY --chown=node:node index.js .
 
-# Cambiamos al usuario seguro no-privilegiado antes de la ejecución
+# Cambiar al usuario no-privilegiado nativo de la imagen Alpine de Node
 USER node
 
-EXPOSE 8080
-
-# Usamos tini como entrypoint para un graceful shutdown seguro
+# Tini interceptará el proceso garantizando un ciclo de vida limpio del contenedor
 ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["node", "index.js"]
