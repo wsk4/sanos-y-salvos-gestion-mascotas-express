@@ -9,30 +9,38 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
     ports:
-      - "5432:5432"
+      - "5434:5432" # Cambiado a 5434 externo para evitar colisiones locales con el ms-geolocalizacion (5433)
     networks:
       - sanos-network
     volumes:
       - pg_data_gestion:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
 
   ms-mascotas:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: sanos-ms-mascotas
-    restart: always  
+    restart: unless-stopped  
     ports:
       - "${PORT}:${PORT}"
     environment:
       DB_HOST: postgres-gestion
-      DB_PORT: 5432
+      DB_PORT: 5432 # Puerto interno de la red de Docker
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       PORT: ${PORT}
-      MS_GEOLOCALIZACION_URL: ${MS_GEOLOCALIZACION_URL}
+      # Tip de Arquitectura: Aquí puedes apuntar directo al contenedor del otro servicio
+      MS_GEOLOCALIZACION_URL: ${MS_GEOLOCALIZACION_URL} 
     depends_on:
-      - postgres-gestion
+      postgres-gestion:
+        condition: service_healthy # Garantiza que la DB esté lista antes de que Node intente conectar
     networks:
       - sanos-network
 
@@ -42,3 +50,4 @@ networks:
 
 volumes:
   pg_data_gestion:
+    driver: local
