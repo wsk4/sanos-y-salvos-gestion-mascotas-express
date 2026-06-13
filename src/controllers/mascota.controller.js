@@ -20,6 +20,15 @@ const crearMascota = async (req, res, next) => {
     }
 };
 
+const getDashboard = async (req, res, next) => {
+    try {
+        const data = await mascotaService.obtenerDashboard();
+        res.status(200).json(data);
+    } catch (err) {
+        next(err);
+    }
+};
+
 const listarMascotas = async (req, res, next) => {
     try {
         const { estado } = req.query;
@@ -32,9 +41,10 @@ const listarMascotas = async (req, res, next) => {
     }
 };
 
+// endpoint para obtener una mascota — CAMBIADO A obtenerPorIdConGeo
 const obtenerMascota = async (req, res, next) => {
     try {
-        const mascota = await mascotaService.obtenerPorId(req.params.id);
+        const mascota = await mascotaService.obtenerPorIdConGeo(req.params.id);
         res.status(200).json(mascota);
     } catch (err) {
         next(err);
@@ -65,6 +75,7 @@ const eliminarMascota = async (req, res, next) => {
 
 export default {
     crearMascota,
+    getDashboard,
     listarMascotas,
     obtenerMascota,
     actualizarMascotaParcial,

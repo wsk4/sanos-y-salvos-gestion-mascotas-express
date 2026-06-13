@@ -30,6 +30,9 @@ export const createMascotaSchema = z.object({
       /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ@.\+\-\s]+$/,
       'El contacto contiene caracteres especiales no permitidos'
     ),
+  direccion: z
+    .string()
+    .optional(), // <-- Mantiene la dirección viva en el req.body
 });
 
 export const updateMascotaSchema = createMascotaSchema.partial();
