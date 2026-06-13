@@ -30,6 +30,7 @@ services:
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       PORT: ${PORT}
+      MS_GEOLOCALIZACION_URL: ${MS_GEOLOCALIZACION_URL}
     depends_on:
       - postgres-gestion
     networks:
