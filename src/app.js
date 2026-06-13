@@ -5,7 +5,7 @@ import healthRoutes from './routes/health.routes.js';
 import errorHandler from './middlewares/errorHandler.js';
 
 const app = express();
-
+/*
 app.use(cors({
     origin: [
         'http://localhost:5173',
@@ -17,7 +17,7 @@ app.use(cors({
     allowedHeaders: ['Authorization', 'Content-Type', 'Cache-Control'],
     credentials: true,
 }));
-
+*/
 app.use(express.json());
 
 app.use('/api/v1/mascotas', mascotaRoutes);
